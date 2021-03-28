@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import '@ionic/core/css/core.css';
 import '@ionic/core/css/ionic.bundle.css';
@@ -13,12 +13,18 @@ import {
   IonLabel,
 
 } from '@ionic/react';
-import  DataFetching from './DataFetching';
+import DataFetching from './DataFetching';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 
 
 function App() {
 
-  
+  const products = useStoreState((state) => state.products);
+  const fetchProduct = useStoreActions((actions) => actions.fetchProduct);
+  useEffect(() => {
+    // console.log("Start use effect")
+    fetchProduct()
+  }, [])
   return (
     <div className="App">
       <IonApp>
@@ -29,16 +35,22 @@ function App() {
         </IonHeader>
         <IonContent>
           <IonList>
-              <IonItem>
-                <DataFetching/>
-              </IonItem>
+            {/* <IonItem>
+              <DataFetching />
+
+            </IonItem> */}
+            {
+              products.map(item => {
+                return <IonItem>{item.name}</IonItem>
+              })
+            }
           </IonList>
         </IonContent>
-    </IonApp>
+      </IonApp>
     </div>
-    
+
   );
-  
+
 }
 
 export default App;
